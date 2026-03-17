@@ -1,0 +1,30 @@
+body {
+    background-color: #f8f9fa;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+#chat {
+    height: 400px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 8px;
+}
+
+.msg-bubble {
+    margin-bottom: 1rem;
+}
+
+.msg-sender {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #6610f2;
+}
+
+.msg-text {
+    background: #e9ecef;
+    padding: 8px 12px;
+    border-radius: 0 12px 12px 12px;
+    display: inline-block;
+}

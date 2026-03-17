@@ -5,16 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveChat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.1/stomp.min.js"></script>
-
-    <style>
-        body { background-color: #f8f9fa; height: 100vh; display: flex; align-items: center; }
-        #chat { height: 400px; overflow-y: auto; background: white; border-radius: 8px; }
-        .msg-bubble { margin-bottom: 1rem; }
-        .msg-sender { font-size: 0.75rem; font-weight: bold; color: #6610f2; }
-        .msg-text { background: #e9ecef; padding: 8px 12px; border-radius: 0 12px 12px 12px; display: inline-block; }
-    </style>
 </head>
 <body>
 
@@ -50,64 +43,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    var stompClient;
-
-    function setConnected(connected) {
-        document.getElementById('sendMessage').disabled = !connected;
-        const banner = document.getElementById('conn-banner');
-        const statusLabel = document.getElementById('statusLabel');
-
-        banner.textContent = connected ? 'Connected' : 'Disconnected';
-        banner.className = connected ? 'form-text mt-2 text-center text-success' : 'form-text mt-2 text-center text-danger';
-        statusLabel.textContent = connected ? 'Online' : 'Offline';
-    }
-
-    function connect() {
-        var socket = new SockJS('/chat');
-        stompClient = Stomp.over(socket);
-        stompClient.debug = null;
-        stompClient.connect({}, function (frame) {
-            setConnected(true);
-            stompClient.subscribe('/topic/messages', function (message) {
-                showMessage(JSON.parse(message.body));
-            });
-        }, function () {
-            setConnected(false);
-        });
-    }
-
-    function showMessage(message) {
-        const chat = document.getElementById('chat');
-        const empty = document.getElementById('emptyState');
-        if (empty) empty.remove();
-
-        const div = document.createElement('div');
-        div.className = 'msg-bubble';
-        div.innerHTML = `
-            <div class="msg-sender">${message.sender}</div>
-            <div class="msg-text">${message.content}</div>
-        `;
-
-        chat.appendChild(div);
-        chat.scrollTop = chat.scrollHeight;
-    }
-
-    function sendMessage() {
-        const sender = document.getElementById('senderInput').value.trim();
-        const content = document.getElementById('messageInput').value.trim();
-        if (!sender || !content) return;
-
-        stompClient.send("/app/sendMessage", {}, JSON.stringify({sender, content}));
-        document.getElementById('messageInput').value = '';
-        document.getElementById('senderInput').readOnly = true;
-    }
-
-    document.getElementById('sendMessage').onclick = sendMessage;
-    document.getElementById('messageInput').onkeydown = (e) => { if(e.key === 'Enter') sendMessage(); };
-    window.onload = connect;
-</script>
-
+<script src="/js/app.js"></script>
 </body>
 </html>
